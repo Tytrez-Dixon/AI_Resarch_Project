@@ -1,4 +1,4 @@
-# This file contains sample arguments for running the Perceptron.py file.
+# This file contains sample arguments for running files which import Perceptron.py or for running Perceptron.py itself.
 
 # Learning rate global variable
 # learning_rate = 0.5

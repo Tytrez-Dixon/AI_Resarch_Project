@@ -31,11 +31,11 @@ class Perceptron:
 
 
    # This method provides the equation representing the line (decision boundary).
-    def yfunction(self, a, x, b, c):
+    def yfunction(self, x, a, b, c):
         return (-(a/b) * x) - (c / b)
 
     # This method creates a graph with points and the decision boundary.
-    def graph(self, points, name_string, iteration):
+    def graph(self, points, name_string, iteration, xlabel, ylabel):
 
         '''
         Lists of x and y points respectively. Will help in making the window in the 
@@ -44,9 +44,18 @@ class Perceptron:
         x_points = []
         y_points = []
 
-        for point in points:
-            x_points.append(point[0])
-            y_points.append(point[1])
+        # for point in points:
+        #     x_points.append(point[0])
+        #     y_points.append(point[1])
+
+
+
+
+        fig = plt.figure()
+
+        x_points = [p[0] for p in points]
+        y_points = [p[1] for p in points]
+        labels = [p[3] for p in points]
 
         '''
         Maximum and minimum values for the lists of x points and y points respectively. Will
@@ -57,28 +66,24 @@ class Perceptron:
         y_axis_min = min(y_points)
         y_axis_max = max(y_points)
 
-        xList = np.linspace(-6, 10, 20)
+        # xList = np.linspace(x_axis_min - 1, x_axis_min + 1, 100)
+
+        xList = np.linspace(-(x_axis_min), x_axis_max + 1, int(x_axis_max * 2))
 
         yList = self.yfunction(xList, self.weight1, self.weight2, self.bias)
-
-        fig = plt.figure()
-
-        x_points = [p[0] for p in points]
-        y_points = [p[1] for p in points]
-        labels = [p[2] for p in points]
 
         # print(x_points)
         # print(y_points)
 
         plt.axis([x_axis_min - 1, x_axis_max + 1, y_axis_min - 1, y_axis_max + 1])
 
-        plt.scatter(x_points, y_points, c = labels)
+        plt.scatter(x_points, y_points, c = labels, cmap = 'bwr')
 
-        plt.xlabel("x1")
-        plt.ylabel("x2")
-        plt.title(f"Perceptron_Graph" + " " + str(iteration))
+        plt.xlabel(xlabel)
+        plt.ylabel(ylabel)
+        plt.title(f"UCI Heart Data and Decision Boundary")
 
-        plt.plot(xList, yList)
+        plt.plot(xList, yList, color = 'black')
 
         plt.savefig(name_string)
 
@@ -122,86 +127,28 @@ class Perceptron:
                 self.bias = new_w
 
 
+    # This function returns the accuracy of the decision boundary on the list of points.
+    def get_accuracy(self, list_of_points):
+
+        # Create a variable to keep track of how many points are classified incorrectly.
+        count_wrong = 0
+
+        for p in list_of_points:
+
+            t = self.predict(p[0], p[1])
+
+            if t > 0.5 or t == 0.5:
+                t = 1
+            
+            else:
+                t = 0
+
+            if t != p[3]:
+                count_wrong = count_wrong + 1
+        
+        error_rate = count_wrong / len(list_of_points)
+
+        return 1 - error_rate
 
 # Epsilon global variable
 epsilon = (1 * 10 ** -15)
-
-# Learning rate global variable
-# learning_rate = 0.5
-
-initial_learning_rate = 1
-
-# Global decay parameter variable
-decay_parameter = 0.00001
-
-# Global interations variable.
-iterations = 1000
-
-# Create perceptron object.
-sample_perceptron = Perceptron(random.random(), random.random(), random.random(), 1)
-print()
-
-print(sample_perceptron.weight1)
-print(sample_perceptron.weight2)
-print(sample_perceptron.bias)
-print()
-
-
-test_points = [[6, 1, 0], [7, 3, 0], [8, 2, 0], [9, 0, 0], [8, 4, 1], [8, 6, 1],
-               [9, 2, 1], [9, 5, 1]]
-
-test_points2 = [[6, 1, 1, 0], [7, 3, 1, 0], [8, 2, 1, 0], [9, 0, 1, 0], [8, 4, 1, 1], [8, 6, 1, 1],
-                [9, 2, 1, 1], [9, 5, 1, 1]]
-
-
-
-# Test cost_function function
-# Test successful
-# print(sample_perceptron.cost_function(0, 1, 1))
-# print()
-
-# Test multi_cost_function function
-# Test successful
-
-print(sample_perceptron.multi_cost_function(test_points))
-print()
-
-# Test graph function
-# Test successful
-sample_perceptron.graph(test_points, "Original_Perceptron_Graph.png", 0)
-print()
-
-list_of_file_names =[]
-
-'''
-Global parameter for learning_decay function. Keep track of the amount
-of times the learning rate changes.
-'''
-learning_step = 0
-
-
-
-
-# Test backprop
-# Test successful
-for i in range(iterations):
-    print(f"Iteration: {i}")
-    print(f"Learning Rate: {sample_perceptron.learning_rate}")
-    sample_perceptron.learning(test_points2)
-    learning_step += 1
-    sample_perceptron.learning_rate = ((sample_perceptron.learning_rate) / (1 + decay_parameter*i))
-    sample_perceptron.graph(test_points, "Perceptron_Graph" + str(i) + ".png", i)
-    list_of_file_names.append(f"Perceptron_Graph" + str(i) + ".png")
-
-
-ims = [imageio.imread(f) for f in list_of_file_names]
-
-imageio.mimwrite("Perceptron.gif", ims)
-
-
-
-
-# Print new Perceptron attributes.
-print(sample_perceptron.weight1)
-print(sample_perceptron.weight2)
-print(sample_perceptron.bias)

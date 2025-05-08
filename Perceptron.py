@@ -23,7 +23,7 @@ class Perceptron:
     
     '''
     This method uses the sigmoid function as well as a point (x and y coordinate), weights, and the bias to
-    display the 
+    display the probability that a point belongs to a certain class.
     '''
     def predict(self, x1, x2):
         return self.sigmoid((self.weight1 * x1) + (self.weight2 * x2) + self.bias)

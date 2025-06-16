@@ -14,23 +14,20 @@ class Perceptron:
         self.bias = bias
         self.learning_rate = learning_rate
     
-    '''
-    This method implements the sigmoid function, which is used by the cost_function and 
-    multi_cost_function methods to print values ranging from 0 to 1.
-    '''
+
+    # This method implements the sigmoid function, which is used by the cost_function and 
+    # multi_cost_function methods to print values ranging from 0 to 1.
     def sigmoid(self, x):
         return 1 / (1 + (np.e ** -(x)))
     
-    '''
-    This method uses the sigmoid function as well as a point (x and y coordinate), weights, and the bias to
-    display the probability that a point belongs to a certain class.
-    '''
+    # This method uses the sigmoid function as well as a point (x and y coordinate), weights, and the bias to
+    # display the probability that a point belongs to a certain class.
     def predict(self, x1, x2):
         return self.sigmoid((self.weight1 * x1) + (self.weight2 * x2) + self.bias)
     
 
 
-   # This method provides the equation representing the line (decision boundary).
+    # This method provides the equation representing the line (decision boundary).
     def yfunction(self, x, a, b, c):
         return (-(a/b) * x) - (c / b)
 
@@ -57,10 +54,9 @@ class Perceptron:
         y_points = [p[1] for p in points]
         labels = [p[3] for p in points]
 
-        '''
-        Maximum and minimum values for the lists of x points and y points respectively. Will
-        help in making the window in the perceptron animation fixed.
-        '''
+
+        # Maximum and minimum values for the lists of x points and y points respectively. Will
+        # help in making the window in the perceptron animation fixed.
         x_axis_min = min(x_points)
         x_axis_max = max(x_points)
         y_axis_min = min(y_points)
@@ -103,10 +99,9 @@ class Perceptron:
             
             print(f"Cost for ({point[0]}, {point[1]}): {cost}")
 
-    '''
-    This method adjusts the weights and biases of the Perceptron object based
-    on the placement of the points.
-    '''
+
+    # This method adjusts the weights and biases of the Perceptron object based
+    # on the placement of the points.
     def learning(self, list_of_points):
         list_of_weights = [self.weight1, self.weight2, self.bias]
         for i in range(len(list_of_weights)):
